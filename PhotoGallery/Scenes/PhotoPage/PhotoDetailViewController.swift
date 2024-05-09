@@ -14,10 +14,16 @@ final class PhotoDetailViewController: UIViewController, UIScrollViewDelegate {
     var photos: [Photo] = []
     var currentIndex: Int = 0
     var pageLabel: UILabel!
+    let viewModel = PhotoDetailViewModel()
     
     //MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.photos = photos
+        viewModel.currentIndex = currentIndex
+        viewModel.onPhotoLoaded = { [weak self] in
+            self?.showPhoto()
+        }
         view.backgroundColor = .systemBackground
         setupScrollView()
         setupGestures()
@@ -97,38 +103,25 @@ final class PhotoDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func showPhoto() {
-        let photo = photos[currentIndex]
-        guard let url = URL(string: photo.urls.regular) else { return }
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let data = data, error == nil else { return }
+        if let photoData = viewModel.photoData {
             DispatchQueue.main.async {
-                self?.imageView.image = UIImage(data: data)
-                self?.scrollView.contentSize = self?.imageView.bounds.size ?? .zero
-                self?.updatePageLabel()
+                self.imageView.image = UIImage(data: photoData)
+                self.scrollView.contentSize = self.imageView.bounds.size
+                self.updatePageLabel()
             }
-        }.resume()
+        }
     }
     
     private func updatePageLabel() {
-        pageLabel.text = "\(currentIndex + 1) / \(photos.count)"
+        pageLabel.text = "\(viewModel.currentIndex + 1) / \(viewModel.photos.count)"
     }
     
     private func showPreviousPhoto() {
-        currentIndex -= 1
-        if currentIndex < 0 {
-            currentIndex = photos.count - 1
-        }
-        showPhoto()
-        updatePageLabel()
+        viewModel.showPreviousPhoto()
     }
     
     private func showNextPhoto() {
-        currentIndex += 1
-        if currentIndex >= photos.count {
-            currentIndex = 0
-        }
-        showPhoto()
-        updatePageLabel()
+        viewModel.showNextPhoto()
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

@@ -95,7 +95,6 @@ extension PhotoListViewController: PhotoListViewModelDelegate {
         photoDetailVC.currentIndex = selectedPhotoIndex
         navigationController?.pushViewController(photoDetailVC, animated: true)
     }
-    
 }
 
 //MARK: UICollectionViewDataSource

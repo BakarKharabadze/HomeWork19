@@ -25,7 +25,7 @@ final class PhotoListViewModel {
         fetchPhotos()
     }
     
-    //MARK: Fetch
+    //MARK: Methods
     private func fetchPhotos() {
         let url = "https://api.unsplash.com/photos/?client_id=gr1283rb5XY3Dz6Ph1R5TPiYwJbwhkmQwppTvDY2gpU&fbclid=IwZXh0bgNhZW0CMTAAAR0yqElR8RksDRSgBRi6X53ejW8osE3rZPI5SymofZB9c7xAJvpV2RxZxnI_aem_ARsJBH8x6NBqPlN43ObNN-iAXAF84dKn2ca_hil7frtEin-HK4oC9whFQdyipRFtTCXhBZAI2T2b15d6WhRC0INO&per_page=100"
         
